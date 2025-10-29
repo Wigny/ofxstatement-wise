@@ -39,6 +39,7 @@ class WiseParser(StatementParser[Dict[str, str]]):
         self.bank_id = bank_id
         self.branch_id = branch_id
         self.account_type = account_type
+        self.running_balance: Dict[datetime, Decimal] = {}
 
     def parse(self) -> Statement:
         stmt = super().parse()
@@ -47,6 +48,20 @@ class WiseParser(StatementParser[Dict[str, str]]):
         stmt.bank_id = self.bank_id
         stmt.branch_id = self.branch_id
         stmt.account_type = self.account_type
+        if stmt.lines:
+            stmt.start_date = min(self.running_balance)
+            stmt.end_date = max(self.running_balance)
+
+            first_transaction = next(
+                (l for l in stmt.lines if l.date == stmt.start_date)
+            )
+            assert first_transaction is not None
+
+            stmt.start_balance = (
+                self.running_balance[stmt.start_date] - first_transaction.amount
+            )
+            stmt.end_balance = self.running_balance[stmt.end_date]
+
         return stmt
 
     def split_records(self) -> Iterable[Dict[str, str]]:
@@ -70,5 +85,7 @@ class WiseParser(StatementParser[Dict[str, str]]):
             raise ValueError(
                 f"Expected transactions in the {self.currency} currency only, but got one the {currency} currency"
             )
+
+        self.running_balance[stmt_line.date] = Decimal(line["Running Balance"])
 
         return stmt_line

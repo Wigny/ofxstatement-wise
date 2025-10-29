@@ -5,6 +5,8 @@
       'bank_id': '40571694',
       'branch_id': '0001',
       'currency': 'BRL',
+      'end_balance': Decimal('0.00'),
+      'end_date': datetime.datetime(2025, 8, 5, 9, 7, 22, 14000),
       'invest_lines': [],
       'lines': [   <StatementLine> {   'amount': Decimal('-10010.14'),
       'check_no': None,
@@ -68,7 +70,9 @@
       'memo': 'Converted GBP to BRL',
       'payee': None,
       'refnum': None,
-      'trntype': 'CREDIT'}]}
+      'trntype': 'CREDIT'}],
+      'start_balance': Decimal('0.00'),
+      'start_date': datetime.datetime(2025, 8, 1, 9, 5, 31, 960000)}
 # ---
 # name: test_parse_statement[sample_csv1-None-230801-None-25635393-CHECKING]
   <Statement> {   'account_id': '25635393',
@@ -76,6 +80,8 @@
       'bank_id': '230801',
       'branch_id': None,
       'currency': 'GBP',
+      'end_balance': Decimal('261.84'),
+      'end_date': datetime.datetime(2025, 8, 5, 9, 5, 58, 406000),
       'invest_lines': [],
       'lines': [   <StatementLine> {   'amount': Decimal('-1363.87'),
       'check_no': None,
@@ -158,5 +164,7 @@
               'SALARY',
       'payee': None,
       'refnum': None,
-      'trntype': 'CREDIT'}]}
+      'trntype': 'CREDIT'}],
+      'start_balance': Decimal('0.00'),
+      'start_date': datetime.datetime(2025, 8, 1, 6, 54, 31, 22000)}
 # ---
