@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+from pytest import raises
 
 from ofxstatement.ui import UI
 
@@ -6,12 +7,27 @@ from ofxstatement_wise.wise import WisePlugin
 
 
 def test_wise(snapshot) -> None:
-    config = {"currency": "USD", "account": "TW1"}
+    config = {
+        "currency": "USD",
+        "bank_id": "BANK1",
+        "branch_id": "BRANCH2",
+        "account": "TW1",
+        "account_type": "CHECKING",
+    }
     plugin = WisePlugin(UI(), config)
-    here = os.path.dirname(__file__)
-    sample_filename = os.path.join(here, "sample-statement.csv")
-
-    parser = plugin.get_parser(sample_filename)
+    parser = plugin.get_parser(Path("tests/sample-statement.csv"))
     statement = parser.parse()
 
     assert statement == snapshot
+
+
+def test_parse_statement_currency():
+    plugin = WisePlugin(None, {"currency": "GBP"})
+
+    parser = plugin.get_parser(Path("tests/sample-statement.csv"))
+
+    with raises(
+        ValueError,
+        match="Expected transactions in the GBP currency only, but got one the USD currency",
+    ):
+        parser.parse()
