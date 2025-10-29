@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from ofxstatement.plugin import Plugin
 from ofxstatement.parser import StatementParser
-from ofxstatement.statement import Statement, StatementLine
+from ofxstatement.statement import Currency, Statement, StatementLine
 
 
 class WisePlugin(Plugin):
@@ -79,6 +79,15 @@ class WiseParser(StatementParser[Dict[str, str]]):
         stmt_line.trntype = line["Transaction Type"]
 
         currency = line["Currency"]
+        exchange_from = line["Exchange From"]
+        exchange_rate = line["Exchange Rate"]
+        if exchange_from and exchange_from != currency:
+            stmt_line.orig_currency = Currency(exchange_from, Decimal(exchange_rate))
+
+        payee = line["Payee Name"]
+        if payee:
+            stmt_line.payee = payee
+
         if self.currency is None:
             self.currency = currency
         elif self.currency != currency:
