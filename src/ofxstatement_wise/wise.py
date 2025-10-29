@@ -5,11 +5,7 @@ from decimal import Decimal
 
 from ofxstatement.plugin import Plugin
 from ofxstatement.parser import StatementParser
-from ofxstatement.statement import (
-    Statement,
-    StatementLine,
-    BankAccount,
-)
+from ofxstatement.statement import Statement, StatementLine
 
 
 class WisePlugin(Plugin):
@@ -59,12 +55,13 @@ class WiseParser(StatementParser[Dict[str, str]]):
 
     def parse_record(self, line: Dict[str, str]) -> StatementLine:
         """Parse given transaction line and return StatementLine object"""
-        sl = StatementLine()
+        stmt_line = StatementLine()
 
-        sl.id = line["TransferWise ID"]
-        sl.date = datetime.strptime(line["Date Time"], "%d-%m-%Y %H:%M:%S.%f")
-        sl.memo = line["Description"]
-        sl.amount = Decimal(line["Amount"])
+        stmt_line.id = line["TransferWise ID"]
+        stmt_line.date = datetime.strptime(line["Date Time"], "%d-%m-%Y %H:%M:%S.%f")
+        stmt_line.memo = line["Description"]
+        stmt_line.amount = Decimal(line["Amount"])
+        stmt_line.trntype = line["Transaction Type"]
 
         currency = line["Currency"]
         if self.currency is None:
@@ -74,26 +71,4 @@ class WiseParser(StatementParser[Dict[str, str]]):
                 f"Expected transactions in the {self.currency} currency only, but got one the {currency} currency"
             )
 
-        sl.memo = self._make_memo(line)
-
-        payee_acc_no = line["Payee Account Number"]
-        if payee_acc_no:
-            sl.bank_account_to = BankAccount("", payee_acc_no)
-
-        assert sl.amount is not None
-        sl.trntype = line["Transaction Type"]
-        return sl
-
-    def _make_memo(self, line: Dict[str, str]) -> str:
-        descr = line["Description"]
-        payref = line["Payment Reference"]
-        exc_from = line["Exchange From"]
-        exc_to = line["Exchange To"]
-        exc_rate = line["Exchange Rate"]
-
-        memo = descr
-        if payref:
-            memo += f" ({payref})"
-        if exc_from and exc_to and exc_rate:
-            memo += f", {exc_rate} {exc_from}/{exc_to}"
-        return memo
+        return stmt_line
