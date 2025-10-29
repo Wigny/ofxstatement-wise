@@ -2,12 +2,12 @@ import os
 
 from ofxstatement.ui import UI
 
-from ofxstatement_wise.wise import TransferwisePlugin
+from ofxstatement_wise.wise import WisePlugin
 
 
-def test_transferwise(snapshot) -> None:
+def test_wise(snapshot) -> None:
     config = {"currency": "USD", "account": "TW1"}
-    plugin = TransferwisePlugin(UI(), config)
+    plugin = WisePlugin(UI(), config)
     here = os.path.dirname(__file__)
     sample_filename = os.path.join(here, "sample-statement.csv")
 

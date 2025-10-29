@@ -210,8 +210,8 @@ wheels = [
 ]
 
 [[package]]
-name = "ofxstatement-transferwise"
-version = "1.2.1.dev0"
+name = "ofxstatement-wise"
+version = "0.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "ofxstatement" },

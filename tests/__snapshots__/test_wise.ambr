@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_transferwise
+# name: test_wise
   <Statement> {   'account_id': 'TW1',
       'account_type': 'CHECKING',
       'bank_id': None,

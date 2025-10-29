@@ -12,16 +12,16 @@ from ofxstatement.statement import (
 )
 
 
-class TransferwisePlugin(Plugin):
-    """Transferwise CSV format"""
+class WisePlugin(Plugin):
+    """Wise CSV format"""
 
-    def get_parser(self, filename: str) -> "TransferwiseParser":
+    def get_parser(self, filename: str) -> "WiseParser":
         default_ccy = self.settings.get("currency")
         account_id = self.settings.get("account")
-        return TransferwiseParser(filename, default_ccy, account_id)
+        return WiseParser(filename, default_ccy, account_id)
 
 
-class TransferwiseParser(StatementParser[Dict[str, str]]):
+class WiseParser(StatementParser[Dict[str, str]]):
     def __init__(
         self, filename: str, currency: str | None = None, account_id: str | None = None
     ) -> None:
