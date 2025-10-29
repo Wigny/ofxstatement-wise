@@ -24,7 +24,7 @@ classifiers = [
 dependencies = [
     "ofxstatement",
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.9"
 
 [project.urls]
 Homepage = "https://github.com/kedder/ofxstatement-transferwise"
@@ -45,4 +45,12 @@ max-line-length = 88
 
 [tool.black]
 line-length = 88
-target-version = ['py36']
+target-version = ['py39']
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pytest",
+    "black",
+    "syrupy",
+]
