@@ -3,6 +3,7 @@
   <Statement> {   'account_id': 'TW1',
       'account_type': 'CHECKING',
       'bank_id': None,
+      'branch_id': None,
       'currency': 'USD',
       'invest_lines': [],
       'lines': [   <StatementLine> {   'amount': Decimal('-357.38'),
